@@ -12,6 +12,9 @@ import android.os.RemoteException;
 import android.util.Log;
 import android.view.View;
 import android.widget.Button;
+import android.widget.EditText;
+import android.widget.TextView;
+import android.widget.Toast;
 
 import com.example.aidlclientapp1.R;
 
@@ -53,6 +56,8 @@ public class MainActivity extends AppCompatActivity {
 
 
         Button button = findViewById(R.id.button);
+        TextView received = findViewById(R.id.received);
+        EditText sendMessage = findViewById(R.id.sendMessage);
 
         Log.d("myaidlclient", "Client App");
         button.setOnClickListener(new View.OnClickListener() {
@@ -61,8 +66,11 @@ public class MainActivity extends AppCompatActivity {
                 try {
                     if (aidlServerService == null)
                         bind(intent);
-                    if (aidlServerService != null)
-                        aidlServerService.setDisplayData(getPackageName(), getTaskId(), "Hello From Client");
+                    if (aidlServerService != null) {
+                        aidlServerService.setDisplayData(getPackageName(), getTaskId(), sendMessage.getText().toString());
+                        Toast.makeText(MainActivity.this, "Message Sent To Server", Toast.LENGTH_SHORT).show();
+                        sendMessage.setText("");
+                    }
 
                 } catch (RemoteException e) {
                     e.printStackTrace();
@@ -77,7 +85,6 @@ public class MainActivity extends AppCompatActivity {
 //        intent.setClassName("com.example.aidlserverapp", "com.example.aidlserverapp.MyAIDLServerService");
 
         intent.setComponent(new ComponentName("com.example.aidlserverapp", "com.example.aidlserverapp.MyAIDLServerService"));
-
 
 
         if (getBaseContext().getApplicationContext().bindService(intent, myServiceConnection, getApplicationContext().BIND_AUTO_CREATE)) {
