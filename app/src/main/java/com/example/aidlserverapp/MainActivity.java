@@ -6,6 +6,7 @@ import android.annotation.SuppressLint;
 import android.content.ComponentName;
 import android.content.Intent;
 import android.content.ServiceConnection;
+import android.content.SharedPreferences;
 import android.os.Bundle;
 import android.os.IBinder;
 import android.os.RemoteException;
@@ -49,15 +50,22 @@ public class MainActivity extends AppCompatActivity {
         setContentView(R.layout.activity_main);
 
         Intent intent = new Intent("com.jasshugarg.myAIDLSERVER");
-//        intent.setPackage("com.example.aidlserverapp");
-//        intent.setComponent(new ComponentName("com.example.aidlserverapp","com.example.aidlserverapp.MyAIDLServerService"));
-//          getApplicationContext().bindService(intent, myServiceConnection, BIND_AUTO_CREATE);
+
         bind(intent);
 
 
         Button button = findViewById(R.id.button);
         TextView received = findViewById(R.id.received);
         EditText sendMessage = findViewById(R.id.sendMessage);
+
+
+        SharedPreferences sp = getSharedPreferences("ALIDClient1", MODE_PRIVATE);
+        SharedPreferences.Editor ed = sp.edit();
+
+
+        String msg = sp.getString("ALID_Server_Client1", "No Message Received");
+        received.setText(msg);
+
 
         Log.d("myaidlclient", "Client App");
         button.setOnClickListener(new View.OnClickListener() {
@@ -67,9 +75,14 @@ public class MainActivity extends AppCompatActivity {
                     if (aidlServerService == null)
                         bind(intent);
                     if (aidlServerService != null) {
-                        aidlServerService.setDisplayData(getPackageName(), getTaskId(), sendMessage.getText().toString());
+                        String rcvdMsg = aidlServerService.setDisplayData(getPackageName(), getTaskId(), sendMessage.getText().toString());
                         Toast.makeText(MainActivity.this, "Message Sent To Server", Toast.LENGTH_SHORT).show();
                         sendMessage.setText("");
+                        received.setText(rcvdMsg);
+
+                        ed.putString("ALID_Server_Client1", rcvdMsg);
+                        ed.apply();
+
                     }
 
                 } catch (RemoteException e) {
@@ -85,9 +98,7 @@ public class MainActivity extends AppCompatActivity {
 //        intent.setClassName("com.example.aidlserverapp", "com.example.aidlserverapp.MyAIDLServerService");
 
         intent.setComponent(new ComponentName("com.example.aidlserverapp", "com.example.aidlserverapp.MyAIDLServerService"));
-
-
-        if (getBaseContext().getApplicationContext().bindService(intent, myServiceConnection, getApplicationContext().BIND_AUTO_CREATE)) {
+        if (bindService(intent, myServiceConnection, BIND_AUTO_CREATE)) {
             Log.v("myaidlclient", "Bind service Succeeded");
         } else {
             Log.v("myaidlclient", "Bind service failed");

@@ -15,5 +15,5 @@ interface AIDLServer {
 
     int getConnectionCount();
 
-    void setDisplayData(String packageName,int clientPID,String messageFromClient);
+    String setDisplayData(String packageName,int clientPID,String messageFromClient);
 }
