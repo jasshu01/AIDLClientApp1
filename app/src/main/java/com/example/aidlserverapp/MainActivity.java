@@ -59,11 +59,11 @@ public class MainActivity extends AppCompatActivity {
         EditText sendMessage = findViewById(R.id.sendMessage);
 
 
-        SharedPreferences sp = getSharedPreferences("ALIDClient1", MODE_PRIVATE);
+        SharedPreferences sp = getSharedPreferences("AIDLClient1", MODE_PRIVATE);
         SharedPreferences.Editor ed = sp.edit();
 
 
-        String msg = sp.getString("ALID_Server_Client1", "No Message Received");
+        String msg = sp.getString("AIDL_Server_Client1", "No Message Received");
         received.setText(msg);
 
 
@@ -80,7 +80,7 @@ public class MainActivity extends AppCompatActivity {
                         sendMessage.setText("");
                         received.setText(rcvdMsg);
 
-                        ed.putString("ALID_Server_Client1", rcvdMsg);
+                        ed.putString("AIDL_Server_Client1", rcvdMsg);
                         ed.apply();
 
                     }
