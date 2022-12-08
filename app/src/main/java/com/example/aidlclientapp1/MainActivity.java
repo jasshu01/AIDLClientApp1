@@ -1,4 +1,4 @@
-package com.example.aidlserverapp;
+package com.example.aidlclientapp1;
 
 import androidx.appcompat.app.AppCompatActivity;
 
@@ -17,9 +17,7 @@ import android.widget.EditText;
 import android.widget.TextView;
 import android.widget.Toast;
 
-import com.example.aidlclientapp1.R;
-
-import java.io.LineNumberReader;
+import com.example.aidlserverapp.AIDLServer;
 
 public class MainActivity extends AppCompatActivity {
 
@@ -32,6 +30,7 @@ public class MainActivity extends AppCompatActivity {
         @Override
         public void onServiceConnected(ComponentName componentName, IBinder iBinder) {
             aidlServerService = AIDLServer.Stub.asInterface(iBinder);
+
             Log.d("myaidlclient", "Connected to Server");
         }
 
@@ -42,6 +41,7 @@ public class MainActivity extends AppCompatActivity {
 
         }
     };
+
 
     @Override
     @SuppressLint({"MissingInflatedId", "LocalSuppress"})
