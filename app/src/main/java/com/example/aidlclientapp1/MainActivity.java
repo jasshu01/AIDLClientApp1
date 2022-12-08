@@ -114,5 +114,6 @@ public class MainActivity extends AppCompatActivity {
         TextView received = findViewById(R.id.received);
         received.setText(getSharedPreferences("AIDL_Client", MODE_PRIVATE).getString("AIDL_Server_Client", "Nothing to Show"));
 
+
     }
 }
